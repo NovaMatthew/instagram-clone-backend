@@ -3,7 +3,7 @@ mongoose.set('strictQuery', false);  // Prepares for the default behavior in fut
 
 
 // Ensure you replace the below URI with your actual connection string
-const URI = "mongodb+srv://mnova412:BOBCATS24@cluster0.nyuhhcj.mongodb.net/InstagramClone?retryWrites=true&w=majority&appName=Cluster0";
+const URI = "";
 
 const connectDB = async () => {
   try {
