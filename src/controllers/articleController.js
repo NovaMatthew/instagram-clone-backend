@@ -21,18 +21,38 @@ const createArticle = async (req, res) => {
 const updateArticle = async (req, res) => {
   try {
     const article = await Article.findById(req.params.id);
-    if (req.user._id === article.user.toString()) {
-      await Article.updateOne({ $set: req.body });
-      res.status(200).send({
-        status: "success",
-        message: "article has been updated",
-      });
-    } else {
-      res.status(401).send({
+    if (!article) {
+      return res.status(404).send({
         status: "failure",
-        message: "you are not authorized",
+        message: "Article not found",
       });
     }
+
+    if (req.user._id.toString() !== article.user.toString()) {
+      return res.status(401).send({
+        status: "failure",
+        message: "You are not authorized",
+      });
+    }
+
+    // Specify the fields that can be updated
+    const allowedUpdates = ['title', 'content', 'tags'];
+    const updates = {};
+
+    // Construct the updates object, filtering out non-allowed updates
+    allowedUpdates.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    });
+
+    // Perform the update with the filtered fields
+    await Article.updateOne({ _id: req.params.id }, { $set: updates });
+
+    res.status(200).send({
+      status: "success",
+      message: "Article has been updated",
+    });
   } catch (e) {
     res.status(500).send({
       status: "failure",
@@ -40,6 +60,7 @@ const updateArticle = async (req, res) => {
     });
   }
 };
+
 const deleteArticle = async (req, res) => {
   try {
     const article = await Article.findById(req.params.id);

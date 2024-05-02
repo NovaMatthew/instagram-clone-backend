@@ -4,25 +4,31 @@ const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    min: 3,
-    max: 15,
+    minlength: 3,   // Correct property for minimum length
+    maxlength: 15,  // Correct property for maximum length
     unique: true,
   },
-  email: {
+    email: {
     type: String,
     required: true,
-    min: 4,
-    max: 50,
+    minlength: 4,
+    maxlength: 50,
     unique: true,
+    validate: {
+      validator: function(email) {
+        return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
+      },
+      message: 'Please fill a valid email address'
+    }
   },
   password: {
     type: String,
-    require: true,
-    min: 6,
+    required: true,
+    minlength: 6,   // Correct property for minimum length
   },
   description: {
     type: String,
-    max: 50,
+    maxlength: 50,  // Correct property for maximum length
     default: "",
   },
   profilePicture: {
