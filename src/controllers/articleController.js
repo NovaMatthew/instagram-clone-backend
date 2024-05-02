@@ -116,6 +116,7 @@ const getTimeline = async (req, res) => {
       limit: arr.length,
     });
   } catch (e) {
+    console.error(e); // Log the error
     res.status(500).send({
       status: "failure",
       message: e.message,

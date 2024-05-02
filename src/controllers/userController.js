@@ -246,8 +246,33 @@ const searchUsers = async (req, res) => {
     });
   }
 };
+
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}).select("-password -jwtToken -__v");
+    if (!users) {
+      return res.status(404).send({
+        status: "failure",
+        message: "No users found",
+      });
+    }
+    res.status(200).send({
+      status: "success",
+      message: "Users retrieved successfully",
+      data: users,
+    });
+  } catch (e) {
+    console.error(e); // Log the error to console
+    res.status(500).send({
+      status: "failure",
+      message: "Server error"
+    });
+  }
+};
+
+
 module.exports = {
-  deleteUser,
+  getAllUsers,
   updateUser,
   getUser,
   getFollowings,
