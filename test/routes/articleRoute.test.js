@@ -23,5 +23,4 @@ describe('Article Routes', () => {
     });
   });
 
-  // Add other tests as needed
 });
